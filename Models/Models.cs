@@ -27,7 +27,9 @@ public class Handle : HasId {
     [Required]
     public string Name { get; set; }
     [Required]
-    
+    public string Email { get; set; }
+    [Required]
+    public string Password { get; set; }  
 }
 
 public class Message : HasId {
@@ -35,7 +37,6 @@ public class Message : HasId {
     public int Id { get; set; }
     [Required]
     public string Text { get; set; }
-    [Required]
     public Handle Handle { get; set; }
     public int HandleId { get; set; }
     public Chatroom Chatroom { get; set; }

@@ -26,7 +26,59 @@ const post = (url, data) =>
     })
     .catch(e => log(e))
     .then(r => r.json())
+
+const remove = (url, data) =>
+    fetch(url, { 
+        method: 'DELETE',
+        credentials: 'same-origin',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    })
+    .delete(data)
+
+const edit = (url, data) =>
+    fetch(url, { 
+        method: 'PUT',
+        credentials: 'same-origin',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    })
+    .catch(e => log(e))
+    .return(r => r.json())
 // ----------------
+
+
+const Message = (message) =>
+    <a className="message" href={`#/status/${message.id}`}>
+            <p>{message.text}</p>
+            <span>{message.handle}</span>
+            <button className="editMessage">Edit Message</button>
+            <button className="deleteMessage">Delete Message</button>
+    </a>
+    
+class Chatroom extends Component {
+    constructor(props){
+        super(props)
+        this.state = { id: props.params.id }
+    }
+    componentDidMount(){
+        get('/api/chatroom'+this.state.id).then(x => {
+            messages = messages.reverse()
+            this.setState({items: messages})
+        }).catch(e => log(e))
+    }
+    render() {
+        return <div className="grid grid-3-600">
+            <div>
+                {this.state.items.map(Message)}
+                <a href="#/EditMessage" className="edit-button"/>
+                <a href="#/DeleteMessage" className="delete-button"/>
+            </div>
+            <a href="#/AddMessage" className="add-button"/>
+        </div>
+    }
+}
+
 
 const Nav = () => 
     <nav className="pt-navbar pt-dark pt-fixed-top">
@@ -51,10 +103,9 @@ const Breadcrumbs = () =>
         )}
     </ul>
 
-const Card = ({title="IM DA BOSS", message="and you ain't", url="#"}) => 
+const ChatCard = ({title="IM DA BOSS", url="api/chatroom/${chatroom.id}"}) => 
     <div className="pt-card pt-elevation-1 pt-interactive">
         <h5><a href={url}>{title}</a></h5>
-        <p>{message}</p>
     </div>
 
 const Table = () => 
@@ -90,10 +141,10 @@ const Home = () =>
         <hr />
         <div className="grid grid-3-600">
             {[
-                {title: "TEST TITLE", message: "TEST MESSAGE"},
-                {title: "TEST TITLE", message: "TEST MESSAGE"},
-                {title: "TEST TITLE", message: "TEST MESSAGE"}
-            ].map(x => [<Card {...x} />, " "] )}
+                {title: "TEST TITLE"},
+                {title: "TEST TITLE"},
+                {title: "TEST TITLE"}
+            ].map(x => [<ChatCard {...x} />, " "] )}
         </div>
         <div className="grid">
             <Table />
@@ -104,6 +155,8 @@ const reactApp = () =>
     render(
     <Router history={hashHistory}>
         <Route path="/" component={Home}/>
+        <Route path="api/chatroom/:id" component={ChatCard}/>
+      
     </Router>,
     document.querySelector('.app'))
 
