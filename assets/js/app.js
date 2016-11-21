@@ -47,37 +47,17 @@ const edit = (url, data) =>
     .return(r => r.json())
 // ----------------
 
-
-const Message = (message) =>
-    <a className="message" href={`#/status/${message.id}`}>
-            <p>{message.text}</p>
-            <span>{message.handle}</span>
-            <button className="editMessage">Edit Message</button>
-            <button className="deleteMessage">Delete Message</button>
-    </a>
-    
-class Chatroom extends Component {
-    constructor(props){
-        super(props)
-        this.state = { id: props.params.id }
-    }
-    componentDidMount(){
-        get('/api/chatroom'+this.state.id).then(x => {
-            messages = messages.reverse()
-            this.setState({items: messages})
-        }).catch(e => log(e))
-    }
-    render() {
-        return <div className="grid grid-3-600">
-            <div>
-                {this.state.items.map(Message)}
-                <a href="#/EditMessage" className="edit-button"/>
-                <a href="#/DeleteMessage" className="delete-button"/>
-            </div>
-            <a href="#/AddMessage" className="add-button"/>
+const Layout = ({children}) =>
+    <div>
+        <div>
+            <div><Nav/></div>
+            <div><Breadcrumbs/></div>
+            <div><Table/></div>
         </div>
-    }
-}
+        <div>
+        {children}
+        </div>
+    </div>
 
 
 const Nav = () => 
@@ -103,10 +83,7 @@ const Breadcrumbs = () =>
         )}
     </ul>
 
-const ChatCard = ({title="IM DA BOSS", url="api/chatroom/${chatroom.id}"}) => 
-    <div className="pt-card pt-elevation-1 pt-interactive">
-        <h5><a href={url}>{title}</a></h5>
-    </div>
+
 
 const Table = () => 
     <table className="pt-table pt-interactive pt-bordered">
@@ -134,30 +111,35 @@ const Table = () =>
         </tbody>
     </table>
 
-const Home = () => 
-    <div>
-        <Nav />
-        <Breadcrumbs />
-        <hr />
-        <div className="grid grid-3-600">
-            {[
-                {title: "TEST TITLE"},
-                {title: "TEST TITLE"},
-                {title: "TEST TITLE"}
-            ].map(x => [<ChatCard {...x} />, " "] )}
+class Home extends Component {
+    constructor(props){
+        super(props)
+        this.state = {
+            items: []
+        }
+    }
+    componentDidMount(){
+        get('/api/chatroom').then(chatrooms => {
+            chatrooms = chatrooms.reverse()
+            this.setState({items: chatrooms})
+        }).catch(e => log(e))
+    }
+    render(){
+        return <div>
+            <ul className="chatroom-list">
+                {this.state.items.map(x => <li>{x.Title}</li>)}
+            </ul>
         </div>
-        <div className="grid">
-            <Table />
-        </div>
-    </div>
+    }
+}
 
 const reactApp = () => 
     render(
-    <Router history={hashHistory}>
-        <Route path="/" component={Home}/>
-        <Route path="api/chatroom/:id" component={ChatCard}/>
-      
-    </Router>,
+        <Layout>
+            <Router history={hashHistory}>
+                <Route path="/" component={Home}/>
+            </Router>
+        </Layout>,
     document.querySelector('.app'))
 
 reactApp()
