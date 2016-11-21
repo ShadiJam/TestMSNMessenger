@@ -47,6 +47,41 @@ const edit = (url, data) =>
     .return(r => r.json())
 // ----------------
 
+const Chatroom = (chatroom) => 
+    <a className="chatroom" href={`#/status/${chatroom.id}`}>
+        <p>{chatroom.title}</p>
+        <span>{chatroom.HandleId.name}</span>
+    </a>
+
+class ChatPage extends Component {
+    constructor(props){
+        super(props)
+        this.state = { id: props.params.id } 
+    }
+    componentDidMount(){
+        get('/api/chatroom/'+this.state.id).then(x => {
+            this.setState({ item: x })
+        })
+    }
+    render() {
+        const item = this.state.item
+        if(!item)
+            return <div/>
+
+        return <div className="chatroom">
+            <h5>{item.title}</h5>
+            <hr/>
+            <ul className="handle-list">
+                <li>{item.handles}</li>
+            </ul>
+            <hr/>
+            <ul className="messages">
+                <li>{item.messages}</li>
+            </ul>
+        </div>
+    }
+}
+
 const Layout = ({children}) =>
     <div>
         <div>
@@ -126,10 +161,10 @@ class Home extends Component {
     }
     render(){
         return <div>
-            <ul className="chatroom-list">
-                {this.state.items.map(x => <li>{x.Title}</li>)}
-            </ul>
-        </div>
+                <ul>
+                {this.state.items.map(x => <li><Link to={`/api/chatroom/${x.id}`}>{x.title}</Link></li>)}
+                </ul>
+                </div>
     }
 }
 
@@ -138,6 +173,7 @@ const reactApp = () =>
         <Layout>
             <Router history={hashHistory}>
                 <Route path="/" component={Home}/>
+                <Route path="/api/chatroom/:id" component={ChatPage}/>
             </Router>
         </Layout>,
     document.querySelector('.app'))
