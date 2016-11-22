@@ -61,7 +61,7 @@ class Login extends Component {
     }
     submit(e){
         e.preventDefault()
-        post('api/account', {
+        post('api/account/login', {
             Email: this.refs.email.value,
             Password: this.refs.password.value
         }).then(x => {
@@ -78,7 +78,7 @@ class Login extends Component {
                 </ul>
         } 
         return <div>
-            <form id="login-form" action="/login" method="Login" onSubmit={this.onSubmit}>
+            <form id="login-form" action="api/account/login" method="Login" onSubmit={this.onSubmit}>
 
             <div asp-validation-summary="All"></div>
 
@@ -95,7 +95,7 @@ class Login extends Component {
         </div>
         </form>
 
-        <form id="register-form" action="/register" method="Register" onSubmit={this.onSubmit}>
+        <form id="register-form" action="api/account/register" method="Register" onSubmit={this.onSubmit}>
         <div asp-validation-summary="All"></div>
         <p> Or Create an account: </p>
         <div>
@@ -198,6 +198,50 @@ class Home extends Component {
             </div>
     }
 }
+class NewUser extends Component {
+    constructor(props){
+        super(props)
+        this.props.loggedOn = {userAuthenticated}
+        this.props.name = {userName}
+        this.state = {
+            items: []
+        }
+    }
+    componentDidMount(){
+        get('/api/account/register').then(chatrooms => {
+            chatrooms = chatrooms.reverse()
+            this.setState({items: chatrooms})
+        }).catch(e => log(e))
+    }
+    render(){
+        return <div className="new-chatroom">
+            <a href="/createChat">
+                <button>Create a New Chatroom</button>
+            </a>
+        </div>
+    }
+}
+class UserHome extends Component {
+    constructor(props){
+        super(props)
+        this.props.loggedOn = {userAuthenticated}
+        this.props.name = {userName}
+        this.state = {
+            items: []
+        }
+    }
+    componentDidMount(){
+        get('/api/chatroom').then(chatrooms => {
+            chatrooms = chatrooms.reverse()
+            this.setState({items: chatrooms})
+        }).catch(e => log(e))
+    }
+    render(){
+        return <div className="grid grid-3-600">
+            {this.state.items.map(Chatroom)}
+        </div>
+    }
+}
 
 const reactApp = () => 
     render(
@@ -205,6 +249,8 @@ const reactApp = () =>
             <Router history={hashHistory}>
                 <Route path="/" component={Home}/>
                 <Route path="/login" component={Login}/>
+                <Route path="/api/account/register" component={NewUser}/>
+                <Route path="api/account/login" component={UserHome}/>
                 <Route path="*" component={Error}/>
             </Router>
         </Layout>,
