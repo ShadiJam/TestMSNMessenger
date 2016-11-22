@@ -78,30 +78,34 @@ class Login extends Component {
                 </ul>
         } 
         return <div>
-            <form className="login-form" onSubmit={e => this.submit(e)}>
+            <form id="login-form" action="/login" method="Login" onSubmit={this.onSubmit}>
 
             <div asp-validation-summary="All"></div>
 
              <p>Please Log In</p>   
 
         <div>
-            <input ref="Email" type="text" placeholder="user@email.com" required/>
-            <input ref="Password" type="text" placeholder="Your Password"/>
+            <input ref="Email" type="email" placeholder="user@email.com" required/>
+            <input ref="Password" type="password" placeholder="Your Password"/>
         </div>
         <div>
+        <a href='/UserHome'>
             <button type="submit">Log In</button>
+        </a>
         </div>
         </form>
 
-        <form className="register-form" onSubmit={e => this.submit(e)}>
+        <form id="register-form" action="/register" method="Register" onSubmit={this.onSubmit}>
         <div asp-validation-summary="All"></div>
-        <p> Or create an account: </p>
+        <p> Or Create an account: </p>
         <div>
-            <input ref="Email" type="text" placeholder="user@email.com" required/>
-            <input ref="Password" type="text" placeholder="Your Password"/>
+            <input ref="Email" type="email" placeholder="user@email.com" required/>
+            <input ref="Password" type="password" placeholder="Your Password"/>
         </div>
         <div>
-            <button type="submit">Log In</button>
+        <a href='/NewUser'>
+            <button type="submit">Register</button>
+        </a>
         </div>
         </form> 
         </div>
