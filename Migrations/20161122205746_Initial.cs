@@ -82,7 +82,7 @@ namespace TestMSNMessenger.Migrations
                         .Annotation("Npgsql:ValueGeneratedOnAdd", true),
                     ChatroomId = table.Column<int>(nullable: true),
                     Email = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
+                    Handle = table.Column<string>(nullable: true),
                     Password = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
@@ -211,11 +211,6 @@ namespace TestMSNMessenger.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Handles_ChatroomId",
-                table: "Handles",
-                column: "ChatroomId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Messages_ChatroomId",
                 table: "Messages",
                 column: "ChatroomId");
@@ -265,6 +260,11 @@ namespace TestMSNMessenger.Migrations
                 name: "IX_AspNetUserRoles_UserId",
                 table: "AspNetUserRoles",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Handles_ChatroomId",
+                table: "Handles",
+                column: "ChatroomId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

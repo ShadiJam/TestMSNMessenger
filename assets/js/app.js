@@ -57,6 +57,8 @@ const Chatroom = (chatroom) =>
 class Login extends Component {
     constructor(props){
         super(props)
+        this.props.email = {Email}
+        this.props.password = {Password}
         this.state = {}
     }
     submit(e){

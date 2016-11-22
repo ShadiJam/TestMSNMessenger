@@ -27,29 +27,6 @@ namespace TestMSNMessenger.Migrations
                     b.ToTable("Chatrooms");
                 });
 
-            modelBuilder.Entity("Handle", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int?>("ChatroomId");
-
-                    b.Property<string>("Email")
-                        .IsRequired();
-
-                    b.Property<string>("Name")
-                        .IsRequired();
-
-                    b.Property<string>("Password")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ChatroomId");
-
-                    b.ToTable("Handles");
-                });
-
             modelBuilder.Entity("Message", b =>
                 {
                     b.Property<int>("Id")
@@ -229,11 +206,26 @@ namespace TestMSNMessenger.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Handle", b =>
+            modelBuilder.Entity("UserView", b =>
                 {
-                    b.HasOne("Chatroom")
-                        .WithMany("Handles")
-                        .HasForeignKey("ChatroomId");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("ChatroomId");
+
+                    b.Property<string>("Email")
+                        .IsRequired();
+
+                    b.Property<string>("Handle");
+
+                    b.Property<string>("Password")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatroomId");
+
+                    b.ToTable("Handles");
                 });
 
             modelBuilder.Entity("Message", b =>
@@ -243,7 +235,7 @@ namespace TestMSNMessenger.Migrations
                         .HasForeignKey("ChatroomId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Handle", "Handle")
+                    b.HasOne("UserView", "Handle")
                         .WithMany()
                         .HasForeignKey("HandleId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -284,6 +276,13 @@ namespace TestMSNMessenger.Migrations
                         .WithMany("Roles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("UserView", b =>
+                {
+                    b.HasOne("Chatroom")
+                        .WithMany("Handles")
+                        .HasForeignKey("ChatroomId");
                 });
         }
     }
