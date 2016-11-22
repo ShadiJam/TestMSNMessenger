@@ -2,15 +2,15 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
-[Route("/api/handle")]
-public class HandleController : CRUDController<Handle> {
-    public HandleController(IRepository<Handle> r) : base(r){}
+[Route("/api/userview")]
+public class HandleController : CRUDController<UserView> {
+    public HandleController(IRepository<UserView> r) : base(r){}
 
     [HttpGet("search")]
     public IActionResult Search([FromQuery]string term, int listId = -1){
-        return Ok(r.Read(dbset => dbset.Where(handle => 
-            handle.Name.ToLower().IndexOf(term.ToLower()) != -1
-            || handle.Name.ToLower().IndexOf(term.ToLower()) != -1
+        return Ok(r.Read(dbset => dbset.Where(userview => 
+            userview.Handle.ToLower().IndexOf(term.ToLower()) != -1
+            || userview.Handle.ToLower().IndexOf(term.ToLower()) != -1
         )));
     }
 }

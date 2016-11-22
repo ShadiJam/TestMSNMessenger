@@ -18,18 +18,7 @@ public class Chatroom : HasId
     [Required]
     public string Title { get; set; }
     public ICollection<Message> Messages { get; set; }
-    public ICollection<Handle> Handles { get; set; }
-}
-
-public class Handle : HasId {
-    [Required]
-    public int Id { get; set; }
-    [Required]
-    public string Name { get; set; }
-    [Required]
-    public string Email { get; set; }
-    [Required]
-    public string Password { get; set; }  
+    public ICollection<UserView> Handles { get; set; }
 }
 
 public class Message : HasId {
@@ -37,7 +26,7 @@ public class Message : HasId {
     public int Id { get; set; }
     [Required]
     public string Text { get; set; }
-    public Handle Handle { get; set; }
+    public UserView Handle { get; set; }
     public int HandleId { get; set; }
     public Chatroom Chatroom { get; set; }
     public int ChatroomId { get; set; }
@@ -47,7 +36,7 @@ public class Message : HasId {
 
 // declare the DbSet<T>'s of our DB context, thus creating the tables
 public partial class DB : IdentityDbContext<IdentityUser> {
-    public DbSet<Handle> Handles { get; set; }
+    public DbSet<UserView> Handles { get; set; }
     public DbSet<Chatroom> Chatrooms { get; set; }
     public DbSet<Message> Messages { get; set; }
 }
@@ -55,7 +44,7 @@ public partial class DB : IdentityDbContext<IdentityUser> {
 // create a Repo<T> services
 public partial class Handler {
     public void RegisterRepos(IServiceCollection services){
-        Repo<Handle>.Register(services, "Handles");
+        Repo<UserView>.Register(services, "Handles");
         Repo<Chatroom>.Register(services, "Chatrooms",
             d => d.Include(m => m.Messages).ThenInclude(h => h.Handle));
         Repo<Message>.Register(services, "Messages",
