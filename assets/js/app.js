@@ -48,10 +48,10 @@ const edit = (url, data) =>
 // ----------------
 
 const Chatroom = (chatroom) => 
-    <a className="chatroom" href={`#/status/${chatroom.id}`}>
-        <p>{chatroom.title}</p>
-        <span>{chatroom.HandleId.name}</span>
+    <a className="chatlink" href={`#/status/${chatroom.id}`}>
+        <h1>{chatroom.title}</h1>
     </a>
+    
 
 class ChatPage extends Component {
     constructor(props){
@@ -71,13 +71,13 @@ class ChatPage extends Component {
         return <div className="chatroom">
             <h5>{item.title}</h5>
             <hr/>
-            <ul className="handle-list">
-                <li>{item.handles}</li>
-            </ul>
+            <h1>{item.HandleId.name}</h1>
             <hr/>
-            <ul className="messages">
-                <li>{item.messages}</li>
-            </ul>
+            <div className="grid grid_m-3-600">
+                <ul>
+                {this.state.items.map(ChatroomId.Message)}
+                </ul>
+                </div>
         </div>
     }
 }
@@ -89,6 +89,7 @@ const Layout = ({children}) =>
             <div><Breadcrumbs/></div>
             <div><Table/></div>
         </div>
+        <hr/>
         <div>
         {children}
         </div>
@@ -160,9 +161,9 @@ class Home extends Component {
         }).catch(e => log(e))
     }
     render(){
-        return <div>
+        return <div className="grid grid_m-3-600">
                 <ul>
-                {this.state.items.map(x => <li><Link to={`/api/chatroom/${x.id}`}>{x.title}</Link></li>)}
+                {this.state.items.map(Chatroom)}
                 </ul>
                 </div>
     }
@@ -173,7 +174,7 @@ const reactApp = () =>
         <Layout>
             <Router history={hashHistory}>
                 <Route path="/" component={Home}/>
-                <Route path="/api/chatroom/:id" component={ChatPage}/>
+                <Route path="/status/:id" component={ChatPage}/>
             </Router>
         </Layout>,
     document.querySelector('.app'))

@@ -22,6 +22,14 @@
     }
 }
 
+.chatlink {
+    display: inline-block;
+    border: 1px solid darkslategrey;
+    margin: 30px;
+    padding: 30px;
+    position: center;
+}
+
 @define-mixin grid_r $col, $width, $margin=0 {
         @media (min-width: $(width)px) {
                 .grid-$(col)-$(width) {
